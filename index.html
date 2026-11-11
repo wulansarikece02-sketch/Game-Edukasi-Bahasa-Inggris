@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Lexicon Leap: Game edukasi bahasa Inggris interaktif untuk melatih kosakata dan ejaan melalui tantangan susun kata bertema luar angkasa.">
+    <meta name="author" content="Lexicon Studio">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="color-scheme" content="dark light">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Lexicon Leap">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Lexicon Leap: Petualangan Kata">
+    <meta property="og:description" content="Latih kosakata bahasa Inggris dengan cara yang seru dan menantang.">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:site_name" content="Lexicon Leap">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Lexicon Leap">
+    <meta name="twitter:description" content="Game edukasi bahasa Inggris gratis tanpa install.">
+
+    <!-- Favicon SVG Inline -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f172a'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%2322d3ee' font-family='monospace' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f172a'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%2322d3ee' font-family='monospace' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
+
+    <title>Lexicon Leap: Petualangan Kata</title>
+
+    <style>
+        /* 
+         * DESIGN SYSTEM & RESET 
+         * Arketype: Retro-Futuristic / Technical Precision
+         */
+        :root {
+            --color-bg: oklch(0.13 0.03 260); /* Deep Space */
+            --color-surface: oklch(0.2 0.04 260);
+            --color-primary: oklch(0.7 0.15 200); /* Neon Cyan */
+            --color-secondary: oklch(0.65 0.2 40); /* Solar Orange */
+            --color-text: oklch(0.95 0 0);
+            --color-text-muted: oklch(0.7 0 0);
+            --color-success: oklch(0.75 0.15 150);
+            --color-error: oklch(0.6 0.2 25);
+            
+            --font-display: 'Courier New', Courier, monospace; /* Tech feel */
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-xxl: 64px;
+            
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            
+            --shadow-glow: 0 0 15px oklch(0.7 0.15 200 / 0.3);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+            height: 100%;
+            overflow: hidden; /* Prevent scroll on body, handle in app */
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            height: 100dvh; /* Dynamic viewport height for mobile */
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            user-select: none; /* Anti-select for game feel */
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        /* Grain Overlay */
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: clamp(2rem, 5vw, 3.5rem); color: var(--color-primary); text-shadow: var(--shadow-glow); }
+        h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+        p { line-height: 1.6; color: var(--color-text-muted); }
+
+        /* Layout Utilities */
+        .app-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: var(--space-md);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .screen {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-md) var(--space-lg);
+            font-family: var(--font-display);
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: 2px solid var(--color-primary);
+            background: transparent;
+            color: var(--color-primary);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 44px;
+            min-height: 44px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover, .btn:focus-visible {
+            background: var(--color-primary);
+            color: var(--color-bg);
+            box-shadow: var(--shadow-glow);
+            outline: none;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            border-color: var(--color-text-muted);
+            color: var(--color-text-muted);
+        }
+        .btn-secondary:hover, .btn-secondary:focus-visible {
+            background: var(--color-text-muted);
+            color: var(--color-bg);
+        }
+
+        .btn-large {
+            padding: var(--space-lg) var(--space-xl);
+            font-size: 1.25rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        /* Header / HUD */
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: var(--space-sm) 0;
+            margin-bottom: var(--space-lg);
+            border-bottom: 1px solid oklch(0.3 0 0);
+        }
+
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .stat-label { font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; }
+        .stat-value { font-family: var(--font-display); font-size: 1.25rem; font-weight: bold; color: var(--color-primary); }
+
+        /* Game Area */
+        .word-display {
+            display: flex;
+            gap: var(--space-sm);
+            margin: var(--space-xl) 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            min-height: 60px;
+        }
+
+        .letter-slot {
+            width: 40px;
+            height: 50px;
+            border-bottom: 3px solid var(--color-text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--color-text);
+            transition: all 0.2s;
+        }
+
+        .letter-slot.filled {
+            border-bottom-color: var(--color-primary);
+            color: var(--color-primary);
+            animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .letter-slot.correct {
+            border-bottom-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        .letter-slot.wrong {
+            border-bottom-color: var(--color-error);
+            color: var(--color-error);
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .keyboard-area {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            width: 100%;
+            max-width: 500px;
+            margin-top: auto;
+            padding-bottom: var(--space-md);
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .key {
+            flex: 1;
+            height: 48px;
+            background: var(--color-surface);
+            border: 1px solid oklch(0.3 0 0);
+            border-radius: var(--radius-sm);
+            color: var(--color-text);
+            font-family: var(--font-display);
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.1s;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .key:active, .key.pressed {
+            background: var(--color-primary);
+            color: var(--color-bg);
+            transform: translateY(2px);
+        }
+
+        .key.disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .hint-text {
+            text-align: center;
+            font-style: italic;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-md);
+            min-height: 1.5em;
+        }
+
+        /* Modal / Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: var(--space-md);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--color-surface);
+            border: 1px solid var(--color-primary);
+            padding: var(--space-xl);
+            border-radius: var(--radius-lg);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Settings Form */
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+            width: 100%;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: oklch(0.3 0 0);
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--color-primary); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* Orientation Warning */
+        #orientation-warning {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--color-bg);
+            z-index: 99999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (orientation: portrait) and (max-width: 480px) {
+            /* Optional: Force landscape for specific game modes if needed, but we are flexible here */
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Focus Visible */
+        :focus-visible {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            .key { height: 44px; font-size: 1rem; }
+            .letter-slot { width: 32px; height: 44px; font-size: 1.25rem; }
+            h1 { font-size: 2rem; }
+        }
+        
+        @media (min-width: 768px) {
+            .keyboard-area { max-width: 600px; }
+            .key { height: 56px; font-size: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grain-overlay"></div>
+
+    <!-- Orientation Warning (Optional, mostly for strict landscape games, kept hidden for flexible) -->
+    <div id="orientation-warning">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-primary); margin-bottom: 20px;">
+            <path d="M12 2v20M2 12h20" />
+        </svg>
+        <h2>Putar Perangkat Anda</h2>
+        <p>Game ini lebih nyaman dimainkan dalam mode landscape.</p>
+    </div>
+
+    <div class="app-container">
+        
+        <!-- SCREEN: MENU -->
+        <section id="screen-menu" class="screen active" aria-label="Menu Utama">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="1.5" style="margin-bottom: 16px;">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <h1>LEXICON LEAP</h1>
+                <p>Susun kata. Jelajahi makna.</p>
+            </div>
+            
+            <button class="btn btn-large" id="btn-start" aria-label="Mulai Permainan">Mulai Petualangan</button>
+            <div style="height: 16px;"></div>
+            <button class="btn btn-secondary btn-large" id="btn-settings-menu" aria-label="Pengaturan">Pengaturan</button>
+            <div style="height: 16px;"></div>
+            <button class="btn btn-secondary btn-large" id="btn-howto" aria-label="Cara Bermain">Cara Bermain</button>
+            
+            <div style="margin-top: 40px; font-size: 0.8rem; color: var(--color-text-muted);">
+                Level Tertinggi: <span id="menu-high-level">1</span> | Skor Tertinggi: <span id="menu-high-score">0</span>
+            </div>
+        </section>
+
+        <!-- SCREEN: GAME -->
+        <section id="screen-game" class="screen" aria-label="Area Permainan">
+            <div class="hud">
+                <div class="stat-box">
+                    <span class="stat-label">Level</span>
+                    <span class="stat-value" id="game-level">1</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Skor</span>
+                    <span class="stat-value" id="game-score">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Nyawa</span>
+                    <span class="stat-value" id="game-lives" style="color: var(--color-secondary)">❤❤❤</span>
+                </div>
+                <button class="btn" style="padding: 8px;" id="btn-pause" aria-label="Jeda Permainan">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                </button>
+            </div>
+
+            <div class="hint-text" id="word-hint" aria-live="polite">...</div>
+
+            <div class="word-display" id="word-slots" aria-label="Slot Huruf">
+                <!-- Slots generated by JS -->
+            </div>
+
+            <div class="keyboard-area" id="keyboard">
+                <!-- Keyboard generated by JS -->
+            </div>
+        </section>
+
+        <!-- SCREEN: SETTINGS -->
+        <section id="screen-settings" class="screen" aria-label="Pengaturan">
+            <h2>Pengaturan</h2>
+            <div style="width: 100%; max-width: 400px; margin-top: 32px;">
+                <div class="setting-row">
+                    <span>Efek Suara</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="toggle-sfx" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <span>Musik Latar</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="toggle-music" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <span>Getaran (Haptic)</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="toggle-haptic" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div style="margin-top: 32px; text-align: center;">
+                    <button class="btn btn-secondary" id="btn-reset-data">Reset Data Progres</button>
+                    <div style="height: 16px;"></div>
+                    <button class="btn" id="btn-back-settings">Kembali</button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- MODALS -->
+    <div id="modal-pause" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+        <div class="modal-content">
+            <h2 id="pause-title">Permainan Dijeda</h2>
+            <p>Ambil napas sejenak.</p>
+            <div style="height: 24px;"></div>
+            <button class="btn btn-large" id="btn-resume">Lanjutkan</button>
+            <div style="height: 16px;"></div>
+            <button class="btn btn-secondary btn-large" id="btn-exit">Keluar ke Menu</button>
+        </div>
+    </div>
+
+    <div id="modal-howto" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="howto-title">
+        <div class="modal-content" style="text-align: left;">
+            <h2 id="howto-title" style="text-align: center;">Cara Bermain</h2>
+            <ul style="margin: 24px 0; padding-left: 20px; line-height: 1.8;">
+                <li>Lihat definisi kata di bagian atas.</li>
+                <li>Susun huruf acak menjadi kata yang benar.</li>
+                <li>Klik huruf atau gunakan keyboard fisik.</li>
+                <li>Jawaban benar = +Poin & Lanjut Level.</li>
+                <li>Jawaban salah = -1 Nyawa.</li>
+                <li>Habis nyawa? Game Over.</li>
+            </ul>
+            <div style="text-align: center;">
+                <button class="btn" id="btn-close-howto">Mengerti</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-gameover" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="gameover-title">
+        <div class="modal-content">
+            <h2 id="gameover-title" style="color: var(--color-error)">Misi Gagal</h2>
+            <p>Kosakata kamu perlu diasah lagi!</p>
+            <div style="margin: 24px 0;">
+                <div class="stat-label">Skor Akhir</div>
+                <div class="stat-value" id="final-score" style="font-size: 2.5rem;">0</div>
+            </div>
+            <button class="btn btn-large" id="btn-retry">Coba Lagi</button>
+            <div style="height: 16px;"></div>
+            <button class="btn btn-secondary btn-large" id="btn-home">Menu Utama</button>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * LEXICON LEAP - CORE LOGIC
+         * Vanilla JS, No External Dependencies
+         */
+
+        // --- DATA: WORD BANK (Indonesian Context) ---
+        const wordBank = [
+            { word: "APPLE", hint: "Buah berwarna merah atau hijau, sehat." },
+            { word: "BOOK", hint: "Kumpulan kertas yang berisi cerita atau ilmu." },
+            { word: "CHAIR", hint: "Benda berkaki empat untuk duduk." },
+            { word: "DOG", hint: "Hewan peliharaan yang setia, menggonggong." },
+            { word: "EARTH", hint: "Planet tempat kita tinggal." },
+            { word: "FISH", hint: "Hewan yang hidup di air dan bernapas dengan insang." },
+            { word: "GREEN", hint: "Warna daun dan rumput." },
+            { word: "HOUSE", hint: "Tempat tinggal manusia." },
+            { word: "ICE", hint: "Air yang membeku menjadi padat." },
+            { word: "JUMP", hint: "Gerakan melompat ke atas." },
+            { word: "KITE", hint: "Mainan terbang berbahan kertas dan angin." },
+            { word: "LEMON", hint: "Buah kuning yang rasanya sangat asam." },
+            { word: "MOON", hint: "Satelit alami bumi yang bersinar di malam hari." },
+            { word: "NEST", hint: "Rumah burung yang terbuat dari ranting." },
+            { word: "OCEAN", hint: "Lautan luas yang sangat dalam." },
+            { word: "PIANO", hint: "Alat musik besar dengan tuts hitam putih." },
+            { word: "QUEEN", hint: "Pemimpin wanita dalam kerajaan." },
+            { word: "RAIN", hint: "Air yang jatuh dari awan." },
+            { word: "STAR", hint: "Benda langit yang berkilau di malam hari." },
+            { word: "TREE", hint: "Tumbuhan besar berbatang kayu." },
+            { word: "UMBRELLA", hint: "Pelindung dari panas atau hujan." },
+            { word: "VIOLIN", hint: "Alat musik gesek berukuran kecil." },
+            { word: "WATER", hint: "Cairan jernih yang dibutuhkan semua makhluk hidup." },
+            { word: "XYLOPHONE", hint: "Alat musik pukul bilah kayu." },
+            { word: "YACHT", hint: "Kapal pesiar mewah." },
+            { word: "ZEBRA", hint: "Kuda bergaris hitam putih." },
+            { word: "ROBOT", hint: "Mesin yang dapat diprogram untuk melakukan tugas." },
+            { word: "SPACE", hint: "Area luas di luar atmosfer bumi." },
+            { word: "LASER", hint: "Sinar cahaya yang sangat kuat dan terfokus." },
+            { word: "ALIEN", hint: "Makhluk dari planet lain." }
+        ];
+
+        // --- STATE MANAGEMENT ---
+        const state = {
+            screen: 'menu', // menu, game, settings
+            level: 1,
+            score: 0,
+            lives: 3,
+            currentWordObj: null,
+            userInput: [],
+            isPaused: false,
+            settings: {
+                sfx: true,
+                music: true,
+                haptic: true
+            },
+            highScore: 0,
+            maxLevel: 1
+        };
+
+        // --- AUDIO SYSTEM (Web Audio API) ---
+        const AudioSys = (() => {
+            let ctx = null;
+            
+            const init = () => {
+                if (!ctx) {
+                    ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
+            };
+
+            const playTone = (freq, type, duration) => {
+                if (!state.settings.sfx || !ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            };
+
+            return {
+                init,
+                click: () => playTone(800, 'sine', 0.1),
+                success: () => {
+                    playTone(600, 'sine', 0.1);
+                    setTimeout(() => playTone(900, 'sine', 0.2), 100);
+                },
+                error: () => playTone(150, 'sawtooth', 0.3),
+                win: () => {
+                    playTone(400, 'square', 0.1);
+                    setTimeout(() => playTone(500, 'square', 0.1), 100);
+                    setTimeout(() => playTone(600, 'square', 0.1), 200);
+                    setTimeout(() => playTone(800, 'square', 0.4), 300);
+                }
+            };
+        })();
+
+        // --- PERSISTENCE ---
+        const Storage = {
+            save: () => {
+                try {
+                    const data = {
+                        highScore: state.highScore,
+                        maxLevel: state.maxLevel,
+                        settings: state.settings
+                    };
+                    localStorage.setItem('lexicon_leap_v1', JSON.stringify(data));
+                } catch (e) {
+                    console.warn("Storage full or unavailable");
+                }
+            },
+            load: () => {
+                try {
+                    const raw = localStorage.getItem('lexicon_leap_v1');
+                    if (raw) {
+                        const data = JSON.parse(raw);
+                        state.highScore = data.highScore || 0;
+                        state.maxLevel = data.maxLevel || 1;
+                        state.settings = { ...state.settings, ...data.settings };
+                        
+                        // Update UI Settings
+                        document.getElementById('toggle-sfx').checked = state.settings.sfx;
+                        document.getElementById('toggle-music').checked = state.settings.music;
+                        document.getElementById('toggle-haptic').checked = state.settings.haptic;
+                    }
+                } catch (e) {
+                    console.warn("Data corrupt, resetting");
+                }
+            },
+            reset: () => {
+                localStorage.removeItem('lexicon_leap_v1');
+                location.reload();
+            }
+        };
+
+        // --- GAME LOGIC ---
+        const Game = {
+            init: () => {
+                Storage.load();
+                UI.updateMenuStats();
+                UI.showScreen('menu');
+                
+                // Event Listeners
+                document.getElementById('btn-start').addEventListener('click', () => {
+                    AudioSys.init();
+                    Game.start();
+                });
+                document.getElementById('btn-settings-menu').addEventListener('click', () => UI.showScreen('settings'));
+                document.getElementById('btn-howto').addEventListener('click', () => UI.toggleModal('modal-howto', true));
+                document.getElementById('btn-close-howto').addEventListener('click', () => UI.toggleModal('modal-howto', false));
+                document.getElementById('btn-back-settings').addEventListener('click', () => UI.showScreen('menu'));
+                document.getElementById('btn-reset-data').addEventListener('click', () => {
+                    if(confirm("Yakin ingin menghapus semua progres?")) Storage.reset();
+                });
+                
+                // Settings Toggles
+                ['sfx', 'music', 'haptic'].forEach(key => {
+                    document.getElementById(`toggle-${key}`).addEventListener('change', (e) => {
+                        state.settings[key] = e.target.checked;
+                        Storage.save();
+                    });
+                });
+
+                // Pause/Resume
+                document.getElementById('btn-pause').addEventListener('click', () => Game.pause());
+                document.getElementById('btn-resume').addEventListener('click', () => Game.resume());
+                document.getElementById('btn-exit').addEventListener('click', () => {
+                    UI.toggleModal('modal-pause', false);
+                    UI.showScreen('menu');
+                    UI.updateMenuStats();
+                });
+                
+                // Game Over Actions
+                document.getElementById('btn-retry').addEventListener('click', () => {
+                    UI.toggleModal('modal-gameover', false);
+                    Game.start();
+                });
+                document.getElementById('btn-home').addEventListener('click', () => {
+                    UI.toggleModal('modal-gameover', false);
+                    UI.showScreen('menu');
+                    UI.updateMenuStats();
+                });
+
+                // Keyboard Input
+                window.addEventListener('keydown', Game.handleKeyInput);
+                
+                // Visibility Change (Auto Pause)
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden && state.screen === 'game' && !state.isPaused) {
+                        Game.pause();
+                    }
+                });
+            },
+
+            start: () => {
+                state.level = 1;
+                state.score = 0;
+                state.lives = 3;
+                state.userInput = [];
+                state.isPaused = false;
+                UI.updateHUD();
+                UI.showScreen('game');
+                Game.nextLevel();
+            },
+
+            nextLevel: () => {
+                // Pick random word based on level difficulty (simple logic: just random for now)
+                // In a real app, filter by length
+                const availableWords = wordBank.filter(w => w.word.length <= 4 + Math.floor(state.level / 2));
+                const pool = availableWords.length > 0 ? availableWords : wordBank;
+                
+                // Avoid repeating immediate last word if possible
+                let nextWord = pool[Math.floor(Math.random() * pool.length)];
+                if (state.currentWordObj && nextWord.word === state.currentWordObj.word && pool.length > 1) {
+                     nextWord = pool[Math.floor(Math.random() * pool.length)];
+                }
+
+                state.currentWordObj = nextWord;
+                state.userInput = new Array(nextWord.word.length).fill(null);
+                
+                UI.renderWordSlots();
+                UI.renderHint();
+                UI.renderKeyboard(); // Re-render to enable keys
+            },
+
+            handleInput: (char) => {
+                if (state.isPaused) return;
+                
+                // Find first empty slot
+                const emptyIndex = state.userInput.indexOf(null);
+                if (emptyIndex !== -1) {
+                    state.userInput[emptyIndex] = char;
+                    AudioSys.click();
+                    UI.renderWordSlots();
+                    
+                    // Check if full
+                    if (!state.userInput.includes(null)) {
+                        Game.checkAnswer();
+                    }
+                }
+            },
+
+            handleBackspace: () => {
+                if (state.isPaused) return;
+                // Find last filled slot
+                let lastIndex = -1;
+                for (let i = state.userInput.length - 1; i >= 0; i--) {
+                    if (state.userInput[i] !== null) {
+                        lastIndex = i;
+                        break;
+                    }
+                }
+                
+                if (lastIndex !== -1) {
+                    state.userInput[lastIndex] = null;
+                    AudioSys.click();
+                    UI.renderWordSlots();
+                }
+            },
+
+            handleKeyInput: (e) => {
+                if (state.screen !== 'game') return;
+                
+                const key = e.key.toUpperCase();
+                if (key === 'BACKSPACE') {
+                    Game.handleBackspace();
+                } else if (key.match(/^[A-Z]$/)) {
+                    Game.handleInput(key);
+                } else if (key === 'ESCAPE') {
+                    Game.pause();
+                }
+            },
+
+            checkAnswer: () => {
+                const guess = state.userInput.join('');
+                const target = state.currentWordObj.word;
+                
+                if (guess === target) {
+                    // Correct
+                    AudioSys.success();
+                    if (state.settings.haptic && navigator.vibrate) navigator.vibrate(50);
+                    
+                    state.score += 100 + (state.level * 10);
+                    state.level++;
+                    
+                    // Update High Score
+                    if (state.score > state.highScore) {
+                        state.highScore = state.score;
+                    }
+                    if (state.level > state.maxLevel) {
+                        state.maxLevel = state.level;
+                    }
+                    Storage.save();
+                    
+                    UI.flashSlots('correct');
+                    setTimeout(() => {
+                        Game.nextLevel();
+                    }, 800);
+                } else {
+                    // Wrong
+                    Game.handleError();
+                }
+                UI.updateHUD();
+            },
+
+            handleError: () => {
+                AudioSys.error();
+                if (state.settings.haptic && navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                
+                state.lives--;
+                UI.flashSlots('wrong');
+                UI.updateHUD();
+                
+                if (state.lives <= 0) {
+                    setTimeout(() => {
+                        document.getElementById('final-score').textContent = state.score;
+                        UI.toggleModal('modal-gameover', true);
+                    }, 500);
+                } else {
+                    // Clear input after delay
+                    setTimeout(() => {
+                        state.userInput = new Array(state.currentWordObj.word.length).fill(null);
+                        UI.renderWordSlots();
+                    }, 600);
+                }
+            },
+
+            pause: () => {
+                state.isPaused = true;
+                UI.toggleModal('modal-pause', true);
+            },
+
+            resume: () => {
+                state.isPaused = false;
+                UI.toggleModal('modal-pause', false);
+                AudioSys.init(); // Ensure context is running
+            }
+        };
+
+        // --- UI RENDERER ---
+        const UI = {
+            showScreen: (screenName) => {
+                document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+                document.getElementById(`screen-${screenName}`).classList.add('active');
+                state.screen = screenName;
+            },
+
+            toggleModal: (id, show) => {
+                const el = document.getElementById(id);
+                if (show) el.classList.add('active');
+                else el.classList.remove('active');
+            },
+
+            updateHUD: () => {
+                document.getElementById('game-level').textContent = state.level;
+                document.getElementById('game-score').textContent = state.score;
+                
+                let hearts = '';
+                for(let i=0; i<state.lives; i++) hearts += '❤';
+                document.getElementById('game-lives').textContent = hearts;
+            },
+
+            updateMenuStats: () => {
+                document.getElementById('menu-high-level').textContent = state.maxLevel;
+                document.getElementById('menu-high-score').textContent = state.highScore;
+            },
+
+            renderHint: () => {
+                document.getElementById('word-hint').textContent = state.currentWordObj ? state.currentWordObj.hint : '';
+            },
+
+            renderWordSlots: () => {
+                const container = document.getElementById('word-slots');
+                container.innerHTML = '';
+                
+                state.userInput.forEach((char, index) => {
+                    const slot = document.createElement('div');
+                    slot.className = `letter-slot ${char ? 'filled' : ''}`;
+                    slot.textContent = char || '';
+                    container.appendChild(slot);
+                });
+            },
+
+            flashSlots: (type) => {
+                const slots = document.querySelectorAll('.letter-slot');
+                slots.forEach(s => s.classList.add(type));
+                setTimeout(() => {
+                    slots.forEach(s => s.classList.remove(type));
+                }, 500);
+            },
+
+            renderKeyboard: () => {
+                const container = document.getElementById('keyboard');
+                container.innerHTML = '';
+                
+                const rows = [
+                    "QWERTYUIOP",
+                    "ASDFGHJKL",
+                    "ZXCVBNM"
+                ];
+
+                rows.forEach(rowStr => {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'keyboard-row';
+                    
+                    rowStr.split('').forEach(char => {
+                        const key = document.createElement('div');
+                        key.className = 'key';
+                        key.textContent = char;
+                        key.setAttribute('role', 'button');
+                        key.setAttribute('aria-label', `Huruf ${char}`);
+                        
+                        // Touch/Click Handler
+                        const activate = (e) => {
+                            e.preventDefault(); // Prevent double tap zoom issues
+                            key.classList.add('pressed');
+                            Game.handleInput(char);
+                            setTimeout(() => key.classList.remove('pressed'), 100);
+                        };
+
+                        key.addEventListener('pointerdown', activate);
+                        
+                        rowDiv.appendChild(key);
+                    });
+
+                    // Add Backspace to last row
+                    if (rowStr === "ZXCVBNM") {
+                        const bsKey = document.createElement('div');
+                        bsKey.className = 'key';
+                        bsKey.style.flex = '1.5';
+                        bsKey.innerHTML = '⌫';
+                        bsKey.setAttribute('role', 'button');
+                        bsKey.setAttribute('aria-label', 'Hapus');
+                        
+                        const activateBs = (e) => {
+                            e.preventDefault();
+                            bsKey.classList.add('pressed');
+                            Game.handleBackspace();
+                            setTimeout(() => bsKey.classList.remove('pressed'), 100);
+                        };
+                        bsKey.addEventListener('pointerdown', activateBs);
+                        rowDiv.appendChild(bsKey);
+                    }
+
+                    container.appendChild(rowDiv);
+                });
+            }
+        };
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            Game.init();
+            
+            // Android Resize Handling
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    // Logic to adjust layout if needed specifically for address bar hide/show
+                    // CSS 100dvh handles most, but canvas would need recalculating here
+                }, 150);
+            });
+
+            // Prevent Context Menu on Game Area
+            document.getElementById('screen-game').addEventListener('contextmenu', e => e.preventDefault());
+        });
+
+    </script>
+</body>
+</html>
